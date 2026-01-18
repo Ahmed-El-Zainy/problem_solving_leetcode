@@ -4,18 +4,22 @@
 4        """
 5        time complexity : O(n^2)
 6        memory: 19.41MB , Beats: 6.23%
-7        """
-8        queue = deque(students)
-9        sandwiches = deque(sandwiches)
-10        count = 0
-11        while queue and sandwiches:
-12            if queue[0]==sandwiches[0]:
-13                queue.popleft()
-14                sandwiches.popleft()
-15                count = 0
-16            else:
-17                queue.append(queue.popleft())
-18                count += 1
-19                if count == len(queue):
-20                    return len(queue)
-21        return len(queue)
+7        for use sandwiches as it's 
+8        but of make it as deque we will have optimal solution 
+9        with 
+10        time complexity: O(n)
+11        """
+12        queue = deque(students)
+13        sandwiches = deque(sandwiches)
+14        count = 0
+15        while queue and sandwiches:
+16            if queue[0]==sandwiches[0]:
+17                queue.popleft()
+18                sandwiches.popleft()
+19                count = 0
+20            else:
+21                queue.append(queue.popleft())
+22                count += 1
+23                if count == len(queue):
+24                    return len(queue)
+25        return len(queue)
