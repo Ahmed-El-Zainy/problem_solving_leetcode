@@ -1,46 +1,30 @@
-1import heapq
-2from typing import List
-3class Solution:
-4    def minCost(self, grid: List[List[int]], k: int) -> int:
-5        m, n = len(grid), len(grid[0])
-6        INF = 10**18
-7        
-8        # dist[i][j][t] = min cost to reach (i,j) using t teleports
-9        dist = [[[INF] * (k + 1) for _ in range(n)] for _ in range(m)]
-10        dist[0][0][0] = 0
-11        
-12        # cells sorted by value for teleport handling
-13        cells = sorted((grid[i][j], i, j) for i in range(m) for j in range(n))
-14        
-15        pq = [(0, 0, 0, 0)]  # cost, i, j, teleports_used
-16        
-17        # teleport pointers per teleport count
-18        used = [0] * (k + 1)
-19        
-20        while pq:
-21            cost, i, j, t = heapq.heappop(pq)
-22            if cost > dist[i][j][t]:
-23                continue
-24            
-25            # reached destination
-26            if i == m - 1 and j == n - 1:
-27                return cost
-28            
-29            # normal moves
-30            for ni, nj in ((i + 1, j), (i, j + 1)):
-31                if ni < m and nj < n:
-32                    nc = cost + grid[ni][nj]
-33                    if nc < dist[ni][nj][t]:
-34                        dist[ni][nj][t] = nc
-35                        heapq.heappush(pq, (nc, ni, nj, t))
-36            
-37            # teleport
-38            if t < k:
-39                while used[t] < len(cells) and cells[used[t]][0] <= grid[i][j]:
-40                    _, x, y = cells[used[t]]
-41                    if cost < dist[x][y][t + 1]:
-42                        dist[x][y][t + 1] = cost
-43                        heapq.heappush(pq, (cost, x, y, t + 1))
-44                    used[t] += 1
-45        
-46        return -1
+1class Solution:
+2    def minCost(self, grid: List[List[int]], k: int) -> int:
+3        n = len(grid[0])
+4        mx = max(map(max, grid))
+5        suf_min_f = [inf] * (mx + 2)
+6        for _ in range(k + 1):
+7            min_f = [inf] * (mx + 1)
+8            f = [inf] * (n + 1)
+9            f[1] = -grid[0][0]
+10            for row in grid:
+11                for j, x in enumerate(row):
+12                    v = f[j+1]
+13                    if f[j] < v: v = f[j]
+14                    v += x
+15                    if suf_min_f[x] < v: v = suf_min_f[x]
+16                    f[j + 1] = v
+17                    if f[j + 1] < min_f[x]: min_f[x] = f[j + 1]
+18            tmp = suf_min_f.copy()
+19            for i in range(mx, -1, -1):
+20                v = suf_min_f[i + 1]
+21                if min_f[i] < v: v = min_f[i]
+22                suf_min_f[i] = v
+23            if suf_min_f == tmp:
+24                break
+25        return f[n]
+26
+27
+28
+29
+30
