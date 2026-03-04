@@ -69,6 +69,14 @@
 # @lc code=start
 class Solution:
     def findKthBit(self, n: int, k: int) -> str:
+        ## explain these all solutioin 
+
+        ## The approach is recursive and based on the pattern of the binary string generation.
+        ## For each step, we determine if k is in the first half, middle, or second half of the string.
+        ## If k is in the middle, return '1'.
+        ## If k is in the first half, recursively call with n-1 and same k.
+        ## If k is in the second half, find corresponding position in previous string and invert result.
+
         if n == 1:
             return '0'
         
