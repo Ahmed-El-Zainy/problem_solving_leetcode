@@ -63,6 +63,7 @@
 # @lc code=start
 class Solution:
     def judgeCircle(self, moves: str) -> bool:
+        
         for move in moves:
             if move == 'U':
                 self.x += 1
